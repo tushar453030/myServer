@@ -78,13 +78,13 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const email=profile.username+"@facebook.com";
+        const email=profile.id+"@facebook.com";
         const facebookId= profile.id;
         console.log(email);
         console.log(profile);
         // Check if the user already exists in the database based on the Facebook ID
-        let user = await User.findOne({ facebookId });
-
+        let user = await User.findOne({ email });
+        console.log(user);
         if (!user) {
           // If the user does not exist, create a new user entry in the database
           const encryptedPassword = CryptoJS.AES.encrypt(facebookId, process.env.PASS_SEC).toString();
