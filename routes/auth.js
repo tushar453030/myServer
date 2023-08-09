@@ -54,7 +54,6 @@ router.post("/login",async(req,res)=>{
     try{
         const user= await User.findOne({email: req.body.email});
 
-
         if (!user) {
           return res.status(401).json("Wrong Credentials!. Email is not correct");
         }
@@ -85,6 +84,18 @@ router.post("/login",async(req,res)=>{
     
 })
 
+router.get("/login", async (req, res) => {
+  try {
+      
+      if (req.query.fb_failure) {
+          const errorMessage = req.flash("error")[0];
+          return res.status(401).json({ error: errorMessage});
+      }
+  } catch (err) {
+      return res.status(500).json(err);
+  }
+})
+
 
 //google facebook authentication
 
@@ -97,7 +108,7 @@ router.get("/google",
 
 router.get("/google/callback", 
   passport.authenticate("google", { 
-    failureRedirect: "/login",
+    failureRedirect: "/api/login?fb_failure=true",
     successRedirect: "/profile",
     failureFlash: true,
     successFlash: "Successfully logged in!",
@@ -114,7 +125,7 @@ router.get("/facebook",
 
 router.get("/facebook/callback", 
   passport.authenticate("facebook", { 
-    failureRedirect: "/login",
+    failureRedirect: "/api/login?fb_failure=true",
     successRedirect: "/profile",
     failureFlash: true,
     successFlash: "Successfully logged in!",
