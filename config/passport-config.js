@@ -75,10 +75,12 @@ passport.use(
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       callbackURL: "/api/facebook/callback",
+      
+      profileFields: ['id', 'emails', 'name']
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const email=profile.id+"@facebook.com";
+        const email=profile.emails[0].value;
         const facebookId= profile.id;
         console.log(email);
         console.log(profile);
