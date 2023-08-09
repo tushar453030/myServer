@@ -87,7 +87,7 @@ router.post("/login",async(req,res)=>{
 router.get("/login", async (req, res) => {
   try {
       
-      if (req.query.fb_failure) {
+      if (req.query.failure) {
           const errorMessage = req.flash("error")[0];
           return res.status(401).json({ error: errorMessage});
       }
@@ -96,7 +96,15 @@ router.get("/login", async (req, res) => {
   }
 })
 
-
+router.get("/profile",async(req,res)=>{
+  try{
+    if(req.query.success){
+      return res.status(401).json("User is signed in Succesfully.");
+    }
+  }catch(err){
+    return res.status(500).json(err);
+  }
+})
 //google facebook authentication
 
 router.get("/google", 
@@ -108,8 +116,8 @@ router.get("/google",
 
 router.get("/google/callback", 
   passport.authenticate("google", { 
-    failureRedirect: "/api/login?fb_failure=true",
-    successRedirect: "/profile",
+    failureRedirect: "/api/login?failure=true",
+    successRedirect: "/api/profile?success=true",
     failureFlash: true,
     successFlash: "Successfully logged in!",
   })
@@ -125,8 +133,8 @@ router.get("/facebook",
 
 router.get("/facebook/callback", 
   passport.authenticate("facebook", { 
-    failureRedirect: "/api/login?fb_failure=true",
-    successRedirect: "/profile",
+    failureRedirect: "/api/login?failure=true",
+    successRedirect: "/api/profile?success=true",
     failureFlash: true,
     successFlash: "Successfully logged in!",
   })

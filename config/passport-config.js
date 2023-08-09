@@ -98,7 +98,7 @@ passport.use(
           await user.save();
         }
 
-        if (user.loginType !== "fackbook") {
+        if (user.loginType !== "facebook") {
           //return error
           return done(null, false, {
             message: `You have previously signed up with a different signin method`,
